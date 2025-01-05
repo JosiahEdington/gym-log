@@ -11,18 +11,8 @@ import (
 type Config struct {
 	Host string       `json:"host"`
 	Port string       `json:"port"`
-	DB   mysql.Config `json:"mysql_config"`
+	DB   mysql.Config `json:"mysql"`
 }
-
-func defaultConfig() Config {
-	return Config{
-		Host: "localhost",
-		Port: "3000",
-		DB:   newDbConfig().MySql,
-	}
-}
-
-type ConfigFunc func(*Config)
 
 func newConfig(funcs ...ConfigFunc) Config {
 	c := defaultConfig()
@@ -31,22 +21,13 @@ func newConfig(funcs ...ConfigFunc) Config {
 	}
 	return c
 }
-func withPort(port string) ConfigFunc {
-	return func(c *Config) {
-		c.Port = port
-	}
-}
 
-func withHost(host string) ConfigFunc {
-	return func(c *Config) {
-		c.Host = host
+func newDbConfig(funcs ...DbConfigFunc) mysql.Config {
+	d := defaultDbConfig()
+	for _, fn := range funcs {
+		fn(&d)
 	}
-}
-
-func withDbConfig(db mysql.Config) ConfigFunc {
-	return func(c *Config) {
-		c.DB = db
-	}
+	return d
 }
 
 func LoadConfig() Config {
@@ -74,7 +55,76 @@ func LoadConfig() Config {
 		}
 	}
 	fmt.Printf("config loaded: %v\n", c)
+	fileEncoder[Config](file, c)
 	return c
+}
+
+func defaultConfig() Config {
+	return Config{
+		Host: "localhost",
+		Port: "2999",
+		DB:   defaultDbConfig(),
+	}
+}
+func defaultDbConfig() mysql.Config {
+	return mysql.Config{
+		User:   os.Getenv("DBUSER"),
+		Passwd: os.Getenv("DBPASS"),
+		Net:    "tcp",
+		Addr:   "126.0.0.1:3306",
+		DBName: "gym_log",
+	}
+}
+
+type ConfigFunc func(*Config)
+type DbConfigFunc func(*mysql.Config)
+
+func withPort(port string) ConfigFunc {
+	return func(c *Config) {
+		c.Port = port
+	}
+}
+
+func withHost(host string) ConfigFunc {
+	return func(c *Config) {
+		c.Host = host
+	}
+}
+
+func withDbConfig(db mysql.Config) ConfigFunc {
+	return func(c *Config) {
+		c.DB = db
+	}
+}
+
+func withDbUser(usr string) DbConfigFunc {
+	return func(d *mysql.Config) {
+		d.User = usr
+	}
+}
+
+func withDbPass(pass string) DbConfigFunc {
+	return func(d *mysql.Config) {
+		d.Passwd = pass
+	}
+}
+
+func withDbNet(net string) DbConfigFunc {
+	return func(d *mysql.Config) {
+		d.Net = net
+	}
+}
+
+func withDbAddr(addr string) DbConfigFunc {
+	return func(d *mysql.Config) {
+		d.Addr = addr
+	}
+}
+
+func withDbName(name string) DbConfigFunc {
+	return func(d *mysql.Config) {
+		d.DBName = name
+	}
 }
 
 func fileEncoder[T any](file *os.File, v T) error {

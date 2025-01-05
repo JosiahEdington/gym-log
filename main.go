@@ -18,7 +18,11 @@ func run(ctx context.Context) error {
 	logger := logs.NewLogger(ctx)
 	server := app.NewServer(&config, logger)
 
-	err := app.StartServer(ctx, server)
+	_, err := app.LoadDb(&config.DB)
+	if err != nil {
+		return err
+	}
+	err = app.StartServer(ctx, server)
 	if err != nil {
 		return err
 	}

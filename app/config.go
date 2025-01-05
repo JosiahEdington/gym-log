@@ -4,22 +4,33 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/go-sql-driver/mysql"
 )
 
 type Config struct {
-	Host string `json:"host"`
-	Port string `json:"port"`
+	Host string       `json:"host"`
+	Port string       `json:"port"`
+	DB   mysql.Config `json:"mysql_config"`
 }
 
 func defaultConfig() Config {
 	return Config{
 		Host: "localhost",
 		Port: "3000",
+		DB:   newDbConfig().MySql,
 	}
 }
 
 type ConfigFunc func(*Config)
 
+func newConfig(funcs ...ConfigFunc) Config {
+	c := defaultConfig()
+	for _, fn := range funcs {
+		fn(&c)
+	}
+	return c
+}
 func withPort(port string) ConfigFunc {
 	return func(c *Config) {
 		c.Port = port
@@ -32,12 +43,10 @@ func withHost(host string) ConfigFunc {
 	}
 }
 
-func newConfig(funcs ...ConfigFunc) Config {
-	c := defaultConfig()
-	for _, fn := range funcs {
-		fn(&c)
+func withDbConfig(db mysql.Config) ConfigFunc {
+	return func(c *Config) {
+		c.DB = db
 	}
-	return c
 }
 
 func LoadConfig() Config {

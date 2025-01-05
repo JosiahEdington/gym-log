@@ -25,4 +25,6 @@ func handleRootFunc(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+	greeting := "Hello there!"
+	encode(w, r, 400, greeting)
 }

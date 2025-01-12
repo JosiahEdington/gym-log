@@ -49,12 +49,9 @@ func LoadConfig() Config {
 		fileEncoder[Config](file, c)
 		return c
 	} else {
-		tmpC, err := fileDecoder[Config](file)
-		if err == nil {
-			c = tmpC
-		}
+		c, _ = fileDecoder[Config](file)
 	}
-	fileEncoder[Config](file, c)
+	// fileEncoder[Config](file, c)
 	return c
 }
 

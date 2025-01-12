@@ -54,7 +54,6 @@ func LoadConfig() Config {
 			c = tmpC
 		}
 	}
-	fmt.Printf("config loaded: %v\n", c)
 	fileEncoder[Config](file, c)
 	return c
 }
@@ -62,17 +61,18 @@ func LoadConfig() Config {
 func defaultConfig() Config {
 	return Config{
 		Host: "localhost",
-		Port: "2999",
+		Port: "3000",
 		DB:   defaultDbConfig(),
 	}
 }
 func defaultDbConfig() mysql.Config {
 	return mysql.Config{
-		User:   os.Getenv("DBUSER"),
-		Passwd: os.Getenv("DBPASS"),
-		Net:    "tcp",
-		Addr:   "126.0.0.1:3306",
-		DBName: "gym_log",
+		User:      os.Getenv("DBUSER"),
+		Passwd:    os.Getenv("DBPASS"),
+		Net:       "tcp",
+		Addr:      "126.0.0.1:3000",
+		DBName:    "gym_log",
+		ParseTime: true,
 	}
 }
 

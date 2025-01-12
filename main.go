@@ -7,6 +7,7 @@ import (
 	"os/signal"
 
 	"github.com/JosiahEdington/gym-log/app"
+	"github.com/JosiahEdington/gym-log/data"
 	"github.com/JosiahEdington/gym-log/logs"
 )
 
@@ -18,10 +19,11 @@ func run(ctx context.Context) error {
 	logger := logs.NewLogger(ctx)
 	server := app.NewServer(&config, logger)
 
-	_, err := app.LoadDb(&config.DB)
+	err := data.ConnectToDB(&config.DB)
 	if err != nil {
 		return err
 	}
+
 	err = app.StartServer(ctx, server)
 	if err != nil {
 		return err

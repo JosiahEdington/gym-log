@@ -34,13 +34,38 @@ func handleRootFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleUserSearch(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("\n%v new user search", time.Now().Format(time.DateTime))
-	if r.Method != http.MethodGet {
+	fmt.Printf("\n%v new user search\n", time.Now().Format(time.DateTime))
+	switch r.Method {
+	case http.MethodGet:
+		var (
+			err    error
+			result any
+			db     = data.GetGymDB()
+		)
+
+		if r.FormValue("SearchBy") == "" {
+			fmt.Println("Get All Users")
+			result, _ = db.GetAllUsers()
+		} else {
+			var (
+				by  = r.FormValue("SearchBy")
+				val = r.FormValue("SearchValue")
+			)
+			fmt.Printf("Getting Users where %v = '%v'\n", by, val)
+			result, err = db.GetUserBySearch(by, val)
+			if err != nil {
+				fmt.Printf("%v\n", err)
+			}
+		}
+		encode(w, r, 200, result)
+
+	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	db := data.GetGymDB()
-	users, _ := db.GetAllUsers()
-	// user, _ := db.GetUserByFirstName(r.FormValue("firstname"))
-	encode(w, r, 200, users)
+}
+
+func handleWorkoutSearch(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("\n%v new workout search", time.Now().Format(time.DateTime))
+
 }

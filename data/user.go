@@ -24,11 +24,20 @@ type User struct {
 }
 
 type UserDto struct {
-	UserId    int
-	FirstName string
-	LastName  string
-	Email     string
-	Username  string
+	UserId    int    `json:"userid"`
+	FirstName string `json:"firstname"`
+	LastName  string `json:"lastname"`
+	Email     string `json:"email"`
+	Username  string `json:"username"`
+}
+
+type UserNewDto struct {
+	FirstName   string `json:"firstname"`
+	LastName    string `json:"lastname"`
+	Email       string `json:"email"`
+	Username    string `json:"username"`
+	DateOfBirth string `json:"dateofbirth"`
+	Sex         string `json:"sex"`
 }
 
 type GetUserFunc func(search string) (user User)

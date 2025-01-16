@@ -68,10 +68,32 @@ func handleUserSearch(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleNewUser(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("\n%v handling new user", time.Now().Format(time.DateTime))
+	usr, err := decoder[data.UserNewDto](r)
+	if err != nil {
+		fmt.Printf("Invalid user information: %v\n", err)
+	}
+	fmt.Printf("\n%v handling new user: %v\n", time.Now().Format(time.DateTime), usr)
+	db := data.GetGymDB()
+
+	result, err := db.GetUserBySearch("Username", usr.Username)
+	if err != nil {
+		fmt.Printf("Error saving user: %v\n", err)
+	} else if result != nil {
+		fmt.Printf("Username already exists: %v\n", result)
+	}
+
+	result, err = db.GetUserBySearch("Email", usr.Email)
+	if err != nil {
+		fmt.Printf("Error saving user: %v\n", err)
+	} else if result != nil {
+		fmt.Printf("Email already exists: %v\n", result)
+	}
+
+	fmt.Printf("Saving user: %v\n", usr)
+
 }
 
 func handleWorkoutSearch(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("\n%v new workout search", time.Now().Format(time.DateTime))
+	fmt.Printf("\n%v new workout search: %v", time.Now().Format(time.DateTime), r.Body)
 
 }

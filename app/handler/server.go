@@ -85,7 +85,7 @@ func encode[T any](w http.ResponseWriter, r *http.Request, status int, v T) erro
 	return nil
 }
 
-func decoder[T any](r *http.Response) (T, error) {
+func decoder[T any](r *http.Request) (T, error) {
 	var v T
 
 	err := json.NewDecoder(r.Body).Decode(&v)

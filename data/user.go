@@ -101,7 +101,6 @@ func (repo *GymDB) GetUserByFirstName(firstname string) (UserDto, error) {
 func (repo *GymDB) GetUserByUsername(username string) (UserDto, error) {
 	var usr UserDto
 
-	fmt.Printf("Searching for Username: '%v'\n", username)
 	row := db.QueryRow("Select UserId, FirstName, LastName, Email, Username FROM User WHERE Username = ?", username)
 	if err := row.Scan(&usr.UserId, &usr.FirstName, &usr.LastName, &usr.Email, &usr.Username); err != nil {
 		fmt.Println(row.Scan(&usr.UserId, &usr.FirstName, &usr.LastName, &usr.Email, &usr.Username))

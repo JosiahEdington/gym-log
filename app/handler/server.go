@@ -1,4 +1,4 @@
-package app
+package handler
 
 import (
 	"context"
@@ -11,17 +11,18 @@ import (
 	"sync"
 	"time"
 
+	"github.com/JosiahEdington/gym-log/app"
 	"github.com/JosiahEdington/gym-log/logs"
 )
 
 type Server struct {
-	Config  *Config
+	Config  *app.Config
 	Logger  *logs.Logger
 	Handler http.Handler
 }
 
 func NewServer(
-	config *Config,
+	config *app.Config,
 	logger *logs.Logger,
 ) *Server {
 	mux := http.NewServeMux()

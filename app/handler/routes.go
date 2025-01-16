@@ -1,10 +1,11 @@
-package app
+package handler
 
 import (
 	"fmt"
 	"net/http"
 	"time"
 
+	"github.com/JosiahEdington/gym-log/app"
 	"github.com/JosiahEdington/gym-log/data"
 	"github.com/JosiahEdington/gym-log/logs"
 )
@@ -12,16 +13,17 @@ import (
 type Route struct {
 	mux    *http.ServeMux
 	logger *logs.Logger
-	config *Config
+	config *app.Config
 }
 
 func addRoutes(
 	mux *http.ServeMux,
 	logger *logs.Logger,
-	config *Config,
+	config *app.Config,
 ) {
 	mux.Handle("/", http.HandlerFunc(handleRootFunc))
 	mux.Handle("/user", http.HandlerFunc(handleUserSearch))
+	mux.Handle("/user/new", http.HandlerFunc(handleNewUser))
 }
 
 func handleRootFunc(w http.ResponseWriter, r *http.Request) {
@@ -63,6 +65,10 @@ func handleUserSearch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+}
+
+func handleNewUser(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("\n%v handling new user", time.Now().Format(time.DateTime))
 }
 
 func handleWorkoutSearch(w http.ResponseWriter, r *http.Request) {

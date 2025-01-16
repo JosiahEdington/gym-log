@@ -1,12 +1,13 @@
 {
   "host": "localhost",
   "port": "3000",
+  "instance": "gym-log-app-448001:us-west4:gym-log-01",
   "mysql": {
-    "User": "gym_log_app",
-    "Passwd": "ukT4d0kwTHXIQFQ4kW40!",
+    "User": "gym-log-backend",
+    "Passwd": "+-*qq9kUSg/X]OU#",
     "Net": "tcp",
     "Addr": "127.0.0.1:3306",
-    "DBName": "gym_log",
+    "DBName": "gym-log",
     "Params": null,
     "ConnectionAttributes": "",
     "Collation": "",

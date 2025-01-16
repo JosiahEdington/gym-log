@@ -9,9 +9,10 @@ import (
 )
 
 type Config struct {
-	Host string       `json:"host"`
-	Port string       `json:"port"`
-	DB   mysql.Config `json:"mysql"`
+	Host     string       `json:"host"`
+	Port     string       `json:"port"`
+	Instance string       `json:"instance"`
+	DB       mysql.Config `json:"mysql"`
 }
 
 func newConfig(funcs ...ConfigFunc) Config {
@@ -57,9 +58,11 @@ func LoadConfig() Config {
 
 func defaultConfig() Config {
 	return Config{
-		Host: "localhost",
-		Port: "3000",
-		DB:   defaultDbConfig(),
+		Host:     "localhost",
+		Port:     "3000",
+		Instance: "",
+		// Instance: "gym-log-app-448001:us-west4:gym-log-01",
+		DB: defaultDbConfig(),
 	}
 }
 func defaultDbConfig() mysql.Config {

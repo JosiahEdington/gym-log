@@ -68,28 +68,47 @@ func handleUserSearch(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleNewUser(w http.ResponseWriter, r *http.Request) {
+	var valid bool
+
 	usr, err := decoder[data.UserNewDto](r)
 	if err != nil {
 		fmt.Printf("Invalid user information: %v\n", err)
 	}
-	fmt.Printf("\n%v handling new user: %v\n", time.Now().Format(time.DateTime), usr)
 	db := data.GetGymDB()
 
 	result, err := db.GetUserBySearch("Username", usr.Username)
 	if err != nil {
-		fmt.Printf("Error saving user: %v\n", err)
+		fmt.Printf("Error reading new user: %v\n", err)
+		valid = false
 	} else if result != nil {
 		fmt.Printf("Username already exists: %v\n", result)
+		valid = false
+	} else {
+		valid = true
 	}
 
 	result, err = db.GetUserBySearch("Email", usr.Email)
 	if err != nil {
-		fmt.Printf("Error saving user: %v\n", err)
+		fmt.Printf("Error reading new user: %v\n", err)
+		valid = false
 	} else if result != nil {
 		fmt.Printf("Email already exists: %v\n", result)
+		valid = false
+	} else {
+		valid = true
 	}
 
-	fmt.Printf("Saving user: %v\n", usr)
+	if valid {
+		err = db.SaveUser(usr)
+		if err != nil {
+			fmt.Printf("Error saving new user %v: %v", usr, err)
+			w.WriteHeader(http.StatusNotModified)
+			return
+		} else {
+			w.WriteHeader(http.StatusOK)
+			fmt.Println("User saved Successfully")
+		}
+	}
 
 }
 

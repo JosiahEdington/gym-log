@@ -93,7 +93,7 @@ func (repo *GymDB) GetAllUsers() ([]UserDto, error) {
 	return users, nil
 }
 
-func (repo *GymDB) SaveUser(user UserNewDto) error {
+func (repo *GymDB) SaveUser(user UserNewDto) (int64, error) {
 	var newID int64
 	query := `INSERT INTO User (FirstName, LastName, Username, Email, DateOfBirth, Sex, CreatedDateTime, CreatedBy)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?);`

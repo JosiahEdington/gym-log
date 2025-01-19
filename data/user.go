@@ -6,20 +6,20 @@ import (
 )
 
 type User struct {
-	UserId          int
-	FirstName       string
-	LastName        string
-	Email           string
-	Username        string
-	DateOfBirth     time.Time
-	Sex             string
-	CreatedDateTime time.Time
-	CreatedBy       string
-	UpdatedDateTime time.Time
-	UpdatedBy       string
-	IsDeleted       bool
-	IsInactive      bool
-	IsAdmin         bool
+	UserId          int       `json:"userid"`
+	FirstName       string    `json:"firstname"`
+	LastName        string    `json:"lastname"`
+	Email           string    `json:"email"`
+	Username        string    `json:"username"`
+	DateOfBirth     time.Time `json:"dateofbirth"`
+	Sex             string    `json:"sex"`
+	CreatedDateTime time.Time `json:"createddatetime"`
+	CreatedBy       string    `json:"createdby"`
+	UpdatedDateTime time.Time `json:"updateddatetime"`
+	UpdatedBy       string    `json:"updatedby"`
+	IsDeleted       bool      `json:"isdeleted"`
+	IsInactive      bool      `json:"isinactive"`
+	IsAdmin         bool      `json:"isadmin"`
 }
 
 type UserDto struct {
@@ -30,7 +30,7 @@ type UserDto struct {
 	Username  string `json:"username"`
 }
 
-type UserNewDto struct {
+type NewUser struct {
 	FirstName   string `json:"firstname"`
 	LastName    string `json:"lastname"`
 	Email       string `json:"email"`
@@ -69,6 +69,24 @@ func (repo *GymDB) GetUserBySearch(by string, val string) ([]UserDto, error) {
 	return users, nil
 }
 
+func (repo *GymDB) GetUserByUsername(username string) (UserDto, error) {
+	var usr UserDto
+	fmt.Println("GetUserByUsername: ", username)
+	err := db.QueryRow("SELECT UserId, FirstName, LastName, Email, Username FROM User WHERE username = ?", username).Scan(
+		&usr.UserId,
+		&usr.FirstName,
+		&usr.LastName,
+		&usr.Email,
+		&usr.Username,
+	)
+	if err != nil {
+		fmt.Printf("GetUserByUsername error: %v", err)
+		return usr, err
+	}
+
+	return usr, nil
+}
+
 func (repo *GymDB) GetAllUsers() ([]UserDto, error) {
 	var users []UserDto
 
@@ -93,7 +111,7 @@ func (repo *GymDB) GetAllUsers() ([]UserDto, error) {
 	return users, nil
 }
 
-func (repo *GymDB) SaveUser(user UserNewDto) (int64, error) {
+func (repo *GymDB) SaveNewUser(user NewUser) (int64, error) {
 	var newID int64
 	query := `INSERT INTO User (FirstName, LastName, Username, Email, DateOfBirth, Sex, CreatedDateTime, CreatedBy)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?);`
@@ -129,7 +147,7 @@ func (repo *GymDB) SaveUser(user UserNewDto) (int64, error) {
 		return newID, nil
 	}
 	if err != nil {
-		fmt.Println()
+		return 0, err
 	}
 
 	return newID, nil

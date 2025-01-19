@@ -121,7 +121,7 @@ func (repo *GymDB) GetUserByUsername(username string) (UserDto, error) {
 	return usr, nil
 }
 
-func (repo *GymDB) SaveUser(user UserNewDto) error {
+func (repo *GymDB) SaveUser(user UserNewDto) (int64, error) {
 	var newID int64
 	query := `INSERT INTO User (FirstName, LastName, Username, Email, DateOfBirth, Sex, CreatedDateTime, CreatedBy)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?);`
@@ -132,7 +132,7 @@ func (repo *GymDB) SaveUser(user UserNewDto) error {
 
 	insert, err := db.Prepare(query)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	resp, err := insert.Exec(
@@ -148,17 +148,17 @@ func (repo *GymDB) SaveUser(user UserNewDto) error {
 	insert.Close()
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	newID, err = resp.LastInsertId()
 	if newID == 0 {
 		fmt.Printf("New UserId is: %v\n", newID)
-		return nil
+		return newID, nil
 	}
 	if err != nil {
 		fmt.Println()
 	}
 
-	return nil
+	return newID, nil
 }

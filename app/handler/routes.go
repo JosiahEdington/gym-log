@@ -99,14 +99,14 @@ func handleNewUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if valid {
-		err = db.SaveUser(usr)
+		newID, err := db.SaveUser(usr)
 		if err != nil {
 			fmt.Printf("Error saving new user %v: %v", usr, err)
 			w.WriteHeader(http.StatusNotModified)
 			return
 		} else {
 			w.WriteHeader(http.StatusOK)
-			fmt.Println("User saved Successfully")
+			fmt.Printf("User saved successfully with UserID: %v\n", newID)
 		}
 	}
 

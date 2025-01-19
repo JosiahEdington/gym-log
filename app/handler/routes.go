@@ -98,7 +98,6 @@ func handleNewUser(w http.ResponseWriter, r *http.Request) {
 		valid = true
 	}
 
-<<<<<<< HEAD
 	if valid {
 		newID, err := db.SaveUser(usr)
 		if err != nil {
@@ -110,21 +109,6 @@ func handleNewUser(w http.ResponseWriter, r *http.Request) {
 			fmt.Printf("User saved successfully with UserID: %v\n", newID)
 		}
 	}
-||||||| parent of d4442db (Added a save user function)
-	fmt.Printf("Saving user: %v\n", usr)
-=======
-	if valid {
-		err = db.SaveUser(usr)
-		if err != nil {
-			fmt.Printf("Error saving new user %v: %v", usr, err)
-			w.WriteHeader(http.StatusNotModified)
-			return
-		} else {
-			w.WriteHeader(http.StatusOK)
-			fmt.Println("User saved Successfully")
-		}
-	}
->>>>>>> d4442db (Added a save user function)
 
 }
 

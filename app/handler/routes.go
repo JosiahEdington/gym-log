@@ -115,37 +115,39 @@ func handleNewUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleWorkoutSearch(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("\n%v Searching workout for user: %v\n", time.Now().Format(time.DateTime), r.Header.Get("User"))
+	fmt.Printf("\n%v Searching workouts for user: %v\n", time.Now().Format(time.DateTime), r.Header.Get("User"))
 
 	switch r.Method {
 	case http.MethodGet:
 		var (
-			err    error
-			result any
-			db     = data.GetGymDB()
+			err      error
+			workouts []data.WorkoutDto
+			db       = data.GetGymDB()
 		)
 
 		usr, err := db.GetUserByUsername(r.Header.Get("User"))
 		if err != nil {
 			encode(w, r, 404, "not logged in")
+			return
 		}
 
-		fmt.Printf("Searching workouts for username: %v\n", usr.Username)
 		if r.FormValue("SearchBy") == "" {
-			fmt.Println("Get All Workouts")
-			result, _ = db.GetAllWorkouts(usr)
+			workouts, err = db.GetUserWorkouts(usr)
+			if err != nil {
+				fmt.Println(err)
+				encode(w, r, 200, "no workouts")
+			}
 		} else {
 			var (
 				by  = r.FormValue("SearchBy")
 				val = r.FormValue("SearchValue")
 			)
-			fmt.Printf("Searching workouts for user %v where %v = '%v'\n", usr.Username, by, val)
-			result, err = db.GetWorkoutBySearch(by, val, usr)
+			workouts, err = db.GetWorkoutBySearch(by, val, usr)
 			if err != nil {
-				fmt.Printf("%v\n", err)
+				fmt.Println(err)
 			}
 		}
-		encode(w, r, 200, result)
+		encode(w, r, 200, workouts)
 
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

@@ -23,6 +23,7 @@ type Workout struct {
 }
 
 type WorkoutDto struct {
+	WorkoutId       int     `json:"workoutid"`
 	User            UserDto `json:"user"`
 	Name            string  `json:"name"`
 	StartedDateTime string  `json:"starteddatetime"`
@@ -76,22 +77,22 @@ func (repo *GymDB) GetWorkoutBySearch(by string, val string, user UserDto) ([]Wo
 	return workouts, nil
 }
 
-func (repo *GymDB) GetAllWorkouts(user UserDto) ([]WorkoutDto, error) {
+func (repo *GymDB) GetUserWorkouts(user UserDto) ([]WorkoutDto, error) {
 	var (
 		workouts []WorkoutDto
-		q        = fmt.Sprintf("Select User, Name, StartedDateTime, EndedDateTime, SecondDuration, Category, Type, Rating FROM Workout WHERE User = %v", user.UserId)
+		q        = fmt.Sprintf("Select Name, StartedDateTime, EndedDateTime, SecondDuration, Category, Type, Rating FROM Workout WHERE UserId = %v", user.UserId)
 	)
 
 	rows, err := db.Query(q)
 	if err != nil {
-		return nil, fmt.Errorf("GetAllWorkouts error: %v", err)
+		return nil, fmt.Errorf("GetUserWorkouts error: %v", err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		var wo WorkoutDto
+		wo.User = user
 		rows.Scan(
-			&wo.User,
 			&wo.Name,
 			&wo.StartedDateTime,
 			&wo.EndedDateTime,

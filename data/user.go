@@ -71,7 +71,6 @@ func (repo *GymDB) GetUserBySearch(by string, val string) ([]UserDto, error) {
 
 func (repo *GymDB) GetUserByUsername(username string) (UserDto, error) {
 	var usr UserDto
-	fmt.Println("GetUserByUsername: ", username)
 	err := db.QueryRow("SELECT UserId, FirstName, LastName, Email, Username FROM User WHERE username = ?", username).Scan(
 		&usr.UserId,
 		&usr.FirstName,

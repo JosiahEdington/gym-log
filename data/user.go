@@ -108,3 +108,72 @@ func (repo *GymDB) GetAllUsers() ([]UserDto, error) {
 
 	return users, nil
 }
+
+func (repo *GymDB) GetUserByFirstName(firstname string) (UserDto, error) {
+	var usr UserDto
+
+	row := db.QueryRow("Select * FROM User WHERE FirstName = ?", firstname)
+	if err := row.Scan(&usr.UserId, &usr.FirstName, &usr.LastName, &usr.Email, &usr.Username); err != nil {
+		if err == sql.ErrNoRows {
+			return usr, fmt.Errorf("GetUserByFirstName %s: no such name", firstname)
+		}
+		return usr, fmt.Errorf("GetUserByFirstName %s: %v", firstname, err)
+	}
+	return usr, nil
+}
+
+func (repo *GymDB) GetUserByUsername(username string) (UserDto, error) {
+	var usr UserDto
+
+	row := db.QueryRow("Select UserId, FirstName, LastName, Email, Username FROM User WHERE Username = ?", username)
+	if err := row.Scan(&usr.UserId, &usr.FirstName, &usr.LastName, &usr.Email, &usr.Username); err != nil {
+		fmt.Println(row.Scan(&usr.UserId, &usr.FirstName, &usr.LastName, &usr.Email, &usr.Username))
+		if err == sql.ErrNoRows {
+			return usr, fmt.Errorf("GetUserByUsername %s: no such username", username)
+		}
+		return usr, fmt.Errorf("GetUserByUsername %s: %v", username, err)
+	}
+	return usr, nil
+}
+
+func (repo *GymDB) SaveUser(user UserNewDto) (int64, error) {
+	var newID int64
+	query := `INSERT INTO User (FirstName, LastName, Username, Email, DateOfBirth, Sex, CreatedDateTime, CreatedBy)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?);`
+	dob, err := time.Parse(time.DateOnly, user.DateOfBirth)
+	if err != nil {
+		fmt.Printf("Invalid User Birthday %v: %v\n", user.DateOfBirth, err)
+	}
+
+	insert, err := db.Prepare(query)
+	if err != nil {
+		return 0, err
+	}
+
+	resp, err := insert.Exec(
+		user.FirstName,
+		user.LastName,
+		user.Username,
+		user.Email,
+		dob,
+		user.Sex,
+		time.Now(),
+		user.Username,
+	)
+	insert.Close()
+
+	if err != nil {
+		return 0, err
+	}
+
+	newID, err = resp.LastInsertId()
+	if newID == 0 {
+		fmt.Printf("New UserId is: %v\n", newID)
+		return newID, nil
+	}
+	if err != nil {
+		fmt.Println()
+	}
+
+	return newID, nil
+}

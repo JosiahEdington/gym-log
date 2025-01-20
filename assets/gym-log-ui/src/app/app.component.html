@@ -1,2 +1,10 @@
-  <app-navbar></app-navbar>
-  <router-outlet />
+  <ng-container *ngIf="hasNavbar();else no_nav">
+    <app-navbar></app-navbar>
+    <div class="">
+      <router-outlet />
+    </div>
+  </ng-container>
+  <ng-template #no_nav>
+    <router-outlet />
+
+  </ng-template>

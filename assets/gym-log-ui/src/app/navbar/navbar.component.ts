@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { Component } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, TitleStrategy } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-navbar',
@@ -29,7 +30,7 @@ import { RouterModule, Router } from '@angular/router';
 export class NavbarComponent {
   showDropdown: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private title: Title) {}
 
   isActive(route: string): boolean {
     return this.router.url === route;
@@ -37,5 +38,13 @@ export class NavbarComponent {
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
+  }
+
+  hideDropdown() {
+    this.showDropdown = false;
+  }
+
+  getPageTitle(): string {
+    return this.title.getTitle();
   }
 }

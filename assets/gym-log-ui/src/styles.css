@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .active-nav {
+        @apply rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white;
+    }
+}

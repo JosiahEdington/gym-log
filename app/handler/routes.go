@@ -26,6 +26,7 @@ func addRoutes(
 	mux.Handle("/user/new", http.HandlerFunc(handleNewUser))
 	mux.Handle("/workout", http.HandlerFunc(handleWorkoutSearch))
 	mux.Handle("/workout/new", http.HandlerFunc(handleNewWorkout))
+	mux.Handle("/user/settings", http.HandlerFunc(handleUserSettingsSearch))
 }
 
 func handleRootFunc(w http.ResponseWriter, r *http.Request) {
@@ -159,6 +160,7 @@ func handleNewWorkout(w http.ResponseWriter, r *http.Request) {
 	var (
 		valid    bool
 		username = r.Header.Get("User")
+		db       = data.GetGymDB()
 	)
 	fmt.Printf("\n%v Saving new workout for user: %v\n", time.Now().Format(time.DateTime), username)
 
@@ -166,7 +168,6 @@ func handleNewWorkout(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Printf("Invalid workout information: %v\n", err)
 	}
-	db := data.GetGymDB()
 
 	fmt.Printf("Workout info: %v\n", wo)
 	user, err := db.GetUserByUsername(username)
@@ -192,4 +193,19 @@ func handleNewWorkout(w http.ResponseWriter, r *http.Request) {
 			fmt.Printf("Workout saved successfully with WorkoutId: %v\n", newID)
 		}
 	}
+}
+
+func handleUserSettingsSearch(w http.ResponseWriter, r *http.Request) {
+	var (
+		username = r.Header.Get("User")
+		db       = data.GetGymDB()
+	)
+	fmt.Printf("\n%v Getting user settings for user: %v\n", time.Now().Format(time.DateTime), username)
+
+	settings, err := db.GetUserSettings(username)
+	if err != nil {
+		fmt.Printf("Error retrieving user settings: %v\n", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	encode(w, r, 200, settings)
 }

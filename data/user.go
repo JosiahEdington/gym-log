@@ -6,37 +6,43 @@ import (
 )
 
 type User struct {
-	UserId          int       `json:"userid"`
-	FirstName       string    `json:"firstname"`
-	LastName        string    `json:"lastname"`
-	Email           string    `json:"email"`
-	Username        string    `json:"username"`
-	DateOfBirth     time.Time `json:"dateofbirth"`
-	Sex             string    `json:"sex"`
-	CreatedDateTime time.Time `json:"createddatetime"`
-	CreatedBy       string    `json:"createdby"`
-	UpdatedDateTime time.Time `json:"updateddatetime"`
-	UpdatedBy       string    `json:"updatedby"`
-	IsDeleted       bool      `json:"isdeleted"`
-	IsInactive      bool      `json:"isinactive"`
-	IsAdmin         bool      `json:"isadmin"`
+	UserId                     int       `json:"userid"`
+	FirstName                  string    `json:"firstname"`
+	LastName                   string    `json:"lastname"`
+	Email                      string    `json:"email"`
+	Phone                      string    `json:"phone"`
+	Username                   string    `json:"username"`
+	DateOfBirth                time.Time `json:"dateofbirth"`
+	Sex                        string    `json:"sex"`
+	CreatedDateTime            time.Time `json:"createddatetime"`
+	CreatedBy                  string    `json:"createdby"`
+	UpdatedDateTime            time.Time `json:"updateddatetime"`
+	UpdatedBy                  string    `json:"updatedby"`
+	IsDeleted                  bool      `json:"isdeleted"`
+	IsInactive                 bool      `json:"isinactive"`
+	IsAdmin                    bool      `json:"isadmin"`
+	UserNotificationPreference string    `json:"usernotificationpreference"`
 }
 
 type UserDto struct {
 	UserId    int    `json:"userid"`
 	FirstName string `json:"firstname"`
 	LastName  string `json:"lastname"`
+	Phone     string `json:"phone"`
 	Email     string `json:"email"`
 	Username  string `json:"username"`
 }
 
 type NewUser struct {
-	FirstName   string `json:"firstname"`
-	LastName    string `json:"lastname"`
-	Email       string `json:"email"`
-	Username    string `json:"username"`
-	DateOfBirth string `json:"dateofbirth"`
-	Sex         string `json:"sex"`
+	FirstName              string            `json:"firstname"`
+	LastName               string            `json:"lastname"`
+	Email                  string            `json:"email"`
+	Phone                  string            `json:"phone"`
+	Username               string            `json:"username"`
+	DateOfBirth            string            `json:"dateofbirth"`
+	Sex                    string            `json:"sex"`
+	NotificationPreference string            `json:"notificationpreference"`
+	UserSettings           []UserSettingsDto `json:"usersettings"`
 }
 
 type GetUserFunc func(search string) (user User)

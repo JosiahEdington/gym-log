@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, Router, TitleStrategy } from '@angular/router';
-import { NavbarComponent } from "./navbar/navbar.component";
+import { NavbarComponent } from "./shared/components/navbar/navbar.component";
 import { Title } from '@angular/platform-browser';
 import { NgIf } from '@angular/common';
 
@@ -16,18 +16,19 @@ import { NgIf } from '@angular/common';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  title: string = 'gym-log-ui'
   hiddenPages: Array<string> = [
     // TODO: Set up a route in the Welcome page to log in.
     //'Welcome',
     'Page Not Found',
     'Login',
-    'New User',
+    'Create Profile',
   ]; 
   
-  constructor(private router: Router, private title: Title) {}
+  constructor(private router: Router, private titles: Title) {}
 
   hasNavbar(): boolean {
-  if (this.hiddenPages.includes(this.title.getTitle())) {
+  if (this.hiddenPages.includes(this.titles.getTitle())) {
     return false
   }
   return true

@@ -1,12 +1,31 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
+import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [
+    GoogleSigninButtonModule,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  constructor(private authService: SocialAuthService) {}
 
+  ngOnInit(): void {
+    this.authService.authState.subscribe((user) => {
+      console.log(user)
+    });
+  }
+  refreshToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithgoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
+      // Do more user object stuff here
+      console.log(user);
+    });
+  }
 }

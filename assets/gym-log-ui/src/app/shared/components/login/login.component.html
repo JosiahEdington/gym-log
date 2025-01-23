@@ -29,7 +29,35 @@
           <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
         </div>
       </form>
-  
+      <div (click)="signInWithgoogle()" id="g_id_onload" class="pt-3"
+          data-client_id="gym-log-google-auth-client"
+          data-context="signin"
+          data-ux_mode="popup"
+          data-auto_select="true"
+          data-callback="handleOauthResponse"
+          data-itp_support="true">
+        </div>
+        <!-- data-login_uri="https://localhost:4200" -->
+ 
+      <div class="g_id_signin"
+            data-type="standard"
+            data-shape="pill"
+            data-theme="filled_blue"
+            data-text="signin_with"
+            data-size="large"
+            data-logo_alignment="left">
+      </div>  
+      <script>
+        function decodeJWTToken(token){
+          return JSON.parse(atob(token.split(".")[1]))
+        }
+        function handleOauthResponse(response){
+          const responsePayload = decodeJWTToken(response.credential)
+          console.log(responsePayload)
+          sessionStorage.setItem('loggedinUser', JSON.stringify(responsePayload))
+          window.location('/home')
+        }
+      </script>
       <p class="mt-10 text-center text-sm/6 text-gray-500">
         Not a member?
         <a href="/user/new" class="font-semibold text-indigo-600 hover:text-indigo-500">Create an account</a>

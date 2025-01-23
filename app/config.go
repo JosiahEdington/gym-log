@@ -6,12 +6,14 @@ import (
 	"os"
 
 	"github.com/go-sql-driver/mysql"
+	"golang.org/x/oauth2"
 )
 
 type Config struct {
-	Host string       `json:"host"`
-	Port string       `json:"port"`
-	DB   mysql.Config `json:"mysql"`
+	Host string        `json:"host"`
+	Port string        `json:"port"`
+	DB   mysql.Config  `json:"mysql"`
+	Auth oauth2.Config `json:"oauth2"`
 }
 
 func newConfig(funcs ...ConfigFunc) Config {
@@ -59,7 +61,7 @@ func defaultConfig() Config {
 	return Config{
 		Host: "localhost",
 		Port: "3000",
-		DB:   defaultDbConfig(),
+		// DB:   defaultDbConfig(),
 	}
 }
 func defaultDbConfig() mysql.Config {
@@ -72,6 +74,18 @@ func defaultDbConfig() mysql.Config {
 		ParseTime: true,
 	}
 }
+
+// func defaultOauthConfig() oauth2.Config {
+// 	return oauth2.Config{
+// 		ClientID:     "",
+// 		ClientSecret: "",
+// 		Scopes:       []string{"", ""},
+// 		Endpoint: oauth2.Endpoint{
+// 			AuthURL:  "https://provider.com/o/oauth2/auth",
+// 			TokenURL: "https://provider.com/o/oauth2/token",
+// 		},
+// 	}
+// }
 
 type ConfigFunc func(*Config)
 type DbConfigFunc func(*mysql.Config)

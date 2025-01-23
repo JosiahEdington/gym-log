@@ -24,9 +24,9 @@ func addRoutes(
 	mux.Handle("/", http.HandlerFunc(handleRootFunc))
 	mux.Handle("/user", http.HandlerFunc(handleUserSearch))
 	mux.Handle("/user/new", http.HandlerFunc(handleNewUser))
+	mux.Handle("/user/settings", http.HandlerFunc(handleUserSettingsSearch))
 	mux.Handle("/workout", http.HandlerFunc(handleWorkoutSearch))
 	mux.Handle("/workout/new", http.HandlerFunc(handleNewWorkout))
-	mux.Handle("/user/settings", http.HandlerFunc(handleUserSettingsSearch))
 }
 
 func handleRootFunc(w http.ResponseWriter, r *http.Request) {

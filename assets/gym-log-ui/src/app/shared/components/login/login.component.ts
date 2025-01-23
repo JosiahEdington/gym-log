@@ -2,13 +2,12 @@ import { Component} from '@angular/core';
 import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-social-login';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    GoogleSigninButtonModule,
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+    selector: 'app-login',
+    imports: [
+        GoogleSigninButtonModule,
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
 })
 export class LoginComponent {
   constructor(private authService: SocialAuthService) {}

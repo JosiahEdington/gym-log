@@ -7,17 +7,15 @@ import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-s
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login'
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet, 
-    NavbarComponent,
-    NgIf,
-    SocialLoginModule,
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        NavbarComponent,
+        NgIf,
+        SocialLoginModule,
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent {
   title: string = 'gym-log-ui'

@@ -5,27 +5,25 @@ import { RouterModule, Router, TitleStrategy } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-navbar',
-  standalone: true,
-  animations: [
-    trigger('enterAnimation',[
-                transition(':enter', [
-                  style({transform: 'opacity-0 scale-95'}),
-                  animate('500ms', style({transform: 'opacity-100 scale-100'}))
-                ]),
-                transition(':leave', [
-                  style({transform: 'opacity-100 scale-100'}),
-                  animate('500ms', style({transform: 'opacity-0 scale-95'}))
-                ])
-              ]
-            )
-          ],
-  imports: [
-    RouterModule,
-    CommonModule,
-],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+    selector: 'app-navbar',
+    animations: [
+        trigger('enterAnimation', [
+            transition(':enter', [
+                style({ transform: 'opacity-0 scale-95' }),
+                animate('500ms', style({ transform: 'opacity-100 scale-100' }))
+            ]),
+            transition(':leave', [
+                style({ transform: 'opacity-100 scale-100' }),
+                animate('500ms', style({ transform: 'opacity-0 scale-95' }))
+            ])
+        ])
+    ],
+    imports: [
+        RouterModule,
+        CommonModule,
+    ],
+    templateUrl: './navbar.component.html',
+    styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
   showDropdown: boolean = false;

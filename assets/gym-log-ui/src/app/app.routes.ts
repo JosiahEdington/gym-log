@@ -21,6 +21,7 @@ export const routes: Routes = [
     { path: "welcome", component: WelcomeComponent, title: "Welcome"},
     { path: "login", component: LoginComponent, title: "Login"},
     { path: "user/new", component: NewUserComponent, title: "Create Profile"},
+    { path: "api/register/google", component: DashboardComponent, title: "New User"},
 
     { path: "**", component: PageNotFoundComponent, title: "Page Not Found"},
 ];

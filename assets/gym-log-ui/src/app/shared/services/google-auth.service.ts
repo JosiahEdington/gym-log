@@ -21,6 +21,10 @@ export class GoogleAuthService implements OnInit {
     });
   }
 
+  signIn(): void {
+    this.getAccessToken()
+  }
+
   getAccessToken(): void {
     this.authService.getAccessToken(GoogleLoginProvider.PROVIDER_ID).then(
           accessToken => this.accessToken = accessToken
